@@ -4,7 +4,7 @@ var Tape = require('./Tape.js'),
 require('./tape.css');
 
 var cellWidth = 150;
-var cellHeight = 150;
+var cellHeight = 100;
 
 function initTapeCells(selection) {
   selection.attr('class', 'tape-cell');
@@ -54,7 +54,7 @@ function TapeViz(svg, lookaround, blank, input) {
   var width  = cellWidth * (lookaround+1+lookaround-2) + 2*10;
   var height = cellHeight + 2*10;
   svg.attr({
-    'width': '95%',
+    'width': '100%',
     'viewBox': [0, 0, width, height].join(' ')
   });
 

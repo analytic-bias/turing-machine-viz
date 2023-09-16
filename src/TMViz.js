@@ -54,6 +54,7 @@ function pulseEdge(edge) {
       .style('stroke-width', null);
 }
 
+// multi-tape?
 function addTape(div, spec) {
   // log(spec);
   // let spec.

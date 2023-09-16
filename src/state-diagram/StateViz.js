@@ -200,8 +200,9 @@ function StateViz(container, nodes, linkArray) {
   */
 
   /* eslint-disable no-invalid-this */ // eslint is not familiar with D3
-  var w = 800;
-  var h = 500;
+  // PRESET
+  var w = 600;
+  var h = 400;
   var linkDistance = 140;
   var nodeRadius = 20;
 
@@ -268,16 +269,19 @@ function StateViz(container, nodes, linkArray) {
       .append('path')
         .attr({'class': 'edgepath',
                'id': 'edgepath'+edgeIndex })
-        .each(function (d) { d.domNode = this; });
+        .each(function (d) { 
+          d.domNode = this;
+        });
 
     var labels = group.selectAll('.edgelabel')
       .data(edgeD.labels).enter()
       .append('text')
-        .attr('class', 'edgelabel');
-    labels.append('textPath')
-        .attr('xlink:href', function () { return '#edgepath'+edgeIndex; })
-        .attr('startOffset', '50%')
+        .attr('class', 'edgelabel')
         .text(identity);
+    // labels.append('textPath')
+    //     .attr('xlink:href', function () { return '#edgepath'+edgeIndex; })
+    //     .attr('startOffset', '50%')
+    //     .text(identity);
     /* To reduce JS computation, label positioning varies by edge shape:
         * Straight edges can use a fixed 'dy' value.
         * Loops cannot use 'dy' since it increases letter spacing
@@ -295,12 +299,13 @@ function StateViz(container, nodes, linkArray) {
         labels.attr('dy', labelAbove);
         edgeD.refreshLabels = function () {
           // flip edge labels that are upside-down
-          labels.attr('transform', function () {
+          var mid = edgeD.domNode.getPointAtLength(edgeD.domNode.getTotalLength() / 2.);
+          labels.attr('transform', function (d, i) {
             if (edgeD.target.x < edgeD.source.x) {
               var c = rectCenter(this.getBBox());
-              return 'rotate(180 '+c.x+' '+c.y+')';
+              return 'translate(' + String(mid.x) + ' ' + String(mid.y) + ')\nrotate(180 '+c.x+' '+c.y+')'; // upside down hard to read though
             } else {
-              return null;
+              return 'translate(' + String(mid.x) + ' ' + String(mid.y) + ')';
             }
           });
         };
@@ -314,13 +319,19 @@ function StateViz(container, nodes, linkArray) {
             labels.attr('dy', shouldFlip ? labelBelow : labelAbove);
             isFlipped = shouldFlip;
           }
+          var mid = edgeD.domNode.getPointAtLength(edgeD.domNode.getTotalLength() / 2.);
+          labels.attr('transform', function (d, i) {
+            return 'translate(' + String(mid.x) + ' ' + String(mid.y) + ')';
+          });
         };
         break;
       case EdgeShape.loop:
-        labels.attr('transform', function (d, i) {
-          return 'translate(' + String(8*(i+1)) + ' ' + String(-8*(i+1)) + ')';
-        });
-        edgeD.refreshLabels = noop;
+        edgeD.refreshLabels = function () {
+          var mid = edgeD.domNode.getPointAtLength(edgeD.domNode.getTotalLength() / 2.);
+          labels.attr('transform', function (d, i) {
+            return 'translate(' + String(mid.x) + ' ' + String(mid.y) + ')';
+          });
+        };
         break;
     }
   });
