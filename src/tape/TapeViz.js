@@ -3,8 +3,8 @@ var Tape = require('./Tape.js'),
     d3   = require('d3');
 require('./tape.css');
 
-var cellWidth = 50;
-var cellHeight = 50;
+var cellWidth = 150;
+var cellHeight = 150;
 
 function initTapeCells(selection) {
   selection.attr('class', 'tape-cell');
@@ -15,14 +15,14 @@ function initTapeCells(selection) {
              'height': cellHeight});
   selection.append('text')
       .text(function (d) { return d; })
-      .attr({'x': cellWidth/2, 'y': cellHeight/2 + 8});
+      .attr({'x': cellWidth/2, 'y': cellHeight/2 + 8, 'font-size': '80%'});
   return selection;
 }
 
 function positionCells(selection, offset) {
   offset = (offset == null) ? 0 : offset;
   selection.attr('transform', function (d, i) {
-    return 'translate(' + (-cellWidth+10 + cellWidth*(i+offset)) + ')';
+    return 'translate(' + (-cellWidth+20 + cellWidth*(i+offset)) + ')';
   });
   return selection;
 }
@@ -64,10 +64,11 @@ function TapeViz(svg, lookaround, blank, input) {
 
   svg.append('rect')
       .attr({'id': 'tape-head',
-             'width': (1+1/5) * cellWidth,
-             'height': (1+1/5) * cellHeight,
-             'x': -cellWidth+10/2 + cellWidth*lookaround,
-             'y': 10/2
+             'width': cellWidth,
+             'height': cellHeight,
+             'x': -cellWidth + 20 + cellWidth*lookaround,
+             'y': 10,
+             'stroke-width': 5
            });
 
   this.wrapper.selectAll('.tape-cell')
