@@ -3,7 +3,7 @@ var Tape = require('./Tape.js'),
     d3   = require('d3');
 require('./tape.css');
 
-var cellWidth = 150;
+var cellWidth = 100;
 var cellHeight = 100;
 
 function initTapeCells(selection) {
@@ -15,14 +15,14 @@ function initTapeCells(selection) {
              'height': cellHeight});
   selection.append('text')
       .text(function (d) { return d; })
-      .attr({'x': cellWidth/2, 'y': cellHeight/2 + 8, 'font-size': '80%'});
+      .attr({'x': cellWidth/2, 'y': cellHeight/2 + 8, 'font-size': '100%'});
   return selection;
 }
 
 function positionCells(selection, offset) {
   offset = (offset == null) ? 0 : offset;
   selection.attr('transform', function (d, i) {
-    return 'translate(' + (-cellWidth+20 + cellWidth*(i+offset)) + ')';
+    return 'translate(' + (-cellWidth + (cellWidth * (1/5) - 10) + cellWidth*(i+offset)) + ')';
   });
   return selection;
 }
@@ -36,7 +36,10 @@ function repositionWrapper(wrapper) {
 }
 
 // Tape visualization centered around the tape head.
-function TapeViz(svg, lookaround, blank, input) {
+function TapeViz(svg, lookaround, blank, input, w) {
+  if (w != -1)
+    cellWidth = w;
+
   Tape.call(this, blank, input);
 
   Object.defineProperty(this, 'lookaround', {
@@ -66,7 +69,7 @@ function TapeViz(svg, lookaround, blank, input) {
       .attr({'id': 'tape-head',
              'width': cellWidth,
              'height': cellHeight,
-             'x': -cellWidth + 20 + cellWidth*lookaround,
+             'x': -cellWidth + (cellWidth * (1/5) - 10) + cellWidth*lookaround,
              'y': 10,
              'stroke-width': 5
            });

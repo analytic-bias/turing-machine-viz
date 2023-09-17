@@ -201,8 +201,8 @@ function StateViz(container, nodes, linkArray) {
 
   /* eslint-disable no-invalid-this */ // eslint is not familiar with D3
   // PRESET
-  var w = 600;
-  var h = 400;
+  var w = 800;
+  var h = 500;
   var linkDistance = 140;
   var nodeRadius = 20;
 

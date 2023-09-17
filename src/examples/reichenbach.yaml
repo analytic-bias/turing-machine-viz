@@ -1,0 +1,16 @@
+name: reichenbach tense extension
+source code: |
+  multichar: true
+  cellwidth: 2
+  input: ['I', 'have', 'done', 'that', 'yesterday']
+  blank: '__'
+  start state: generic
+  table:
+  # scan to the rightmost digit
+    generic:
+      ['I', 'done', 'that', 'yesterday']: R
+      ['have']: {R: present-perfect}
+      '__'  : {R: done}
+    present-perfect:
+    done:
+positions:

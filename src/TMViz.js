@@ -56,10 +56,16 @@ function pulseEdge(edge) {
 
 // multi-tape?
 function addTape(div, spec) {
-  // log(spec);
-  // let spec.
-  return new TapeViz(div.append('svg').attr('class', 'tm-tape'), 9,
-    spec.blank, spec.input ? spec.input : [], 0);
+  if (spec.multichar)
+    if (spec.cellwidth)
+      return new TapeViz(div.append('svg').attr('class', 'tm-tape'), 9,
+        spec.blank, spec.input ? spec.input : [], spec.cellwidth * 100);
+    else
+      return new TapeViz(div.append('svg').attr('class', 'tm-tape'), 9,
+        spec.blank, spec.input ? spec.input : [], -1);
+  else
+    return new TapeViz(div.append('svg').attr('class', 'tm-tape'), 9,
+      spec.blank, spec.input ? String(spec.input).split('') : [], -1);
 }
 
 /**

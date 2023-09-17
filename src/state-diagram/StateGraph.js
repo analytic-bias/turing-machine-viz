@@ -101,7 +101,11 @@ function normalize(state, symbol, instruction) {
 function labelFor(symbols, action) {
   var rightSide = ((action.symbol == null) ? '' : (visibleSpace(String(action.symbol)) + ','))
     + String(action.move);
-  return symbols.map(visibleSpace).join(',\n') + '→' + rightSide;
+
+  if (symbols[0][0] == '#')
+    return symbols[0].slice(1) + '→' + rightSide;
+  else
+    return symbols.map(visibleSpace).join(',') + '→' + rightSide;
 }
 
 // replace ' ' with '␣'.
