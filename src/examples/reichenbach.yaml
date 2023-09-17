@@ -1,16 +1,39 @@
-name: reichenbach tense extension
+name: reichenbach (incomplete)
 source code: |
   multichar: true
   cellwidth: 2
-  input: ['I', 'have', 'done', 'that', 'yesterday']
-  blank: '__'
-  start state: generic
+  # When Mahdi graduate from Stony Brook, he would already have finished two MA's.
+  input: ['_', 'When', 'Mahdi', 'graduates', 'from', 'Stony', 'Brook', ',', 'he', 'would', 'already', 'have', 'finished', 'two', 'MA', '.']
+  blank: '_'
+  start state: start
+  # Try some pre-programed lexing?
   table:
-  # scan to the rightmost digit
-    generic:
-      ['I', 'done', 'that', 'yesterday']: R
-      ['have']: {R: present-perfect}
-      '__'  : {R: done}
-    present-perfect:
-    done:
+    start:
+      ['#lexing', '_']: {R: lexing}
+    lexing:
+      ['#clause beginning', 'When']: {write: '!clause-beginning', R}
+      ['#clause ending', ',']: {write: '!clause-ending', R}
+      ['#verb in present', 'graduates']: {write: '!verb-present', R}
+      ['#verb in perfect', 'finished']: {write: '!verb-perfect', R}
+      ['would']: {write: '!aux-future-in-past', R}
+      ['have']: {write: '!aux-prefect-in-present', R}
+      ['#inert', 'Mahdi', 'he', 'from', 'Stony', 'Brook', 'already', 'two', 'MA', '.']: {write: '!inert', R}
+      ['_']: {L: parsing-left}
+    parsing-left:
+      ['_']: {R: reject}
+      ['!inert']: L
+      ['!clause-ending']: {L: match-clause-beginning-left}
+    parsing-right:
+      []
+    match-clause-beginning-left:
+      ['!clause-beginning']: {write: '!inert', R: parse-clause}
+      ['_']: {R: reject}
+    match-clause-ending-right:
+      ['!clause-ending']: {write: '_', R: parsing-right}
+      ['_']: {R: reject}
+    parse-clause:
+      ['!verb-present']: {write: 'R|(S)|(E)', R}
+    reject:
+    accept:
+    # S<E<[R(S)(E)]
 positions:

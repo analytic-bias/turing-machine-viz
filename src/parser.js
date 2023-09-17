@@ -250,11 +250,12 @@ function parseInstructionObject(val) {
   // write key is optional, but must contain a char value if present
   if ('write' in val) {
     var writeStr = String(val.write);
-    if (writeStr.length === 1) {
-      symbol = writeStr;
-    } else {
-      throw new TMSpecError('Write requires a string of length 1');
-    }
+    symbol = writeStr;
+    // if (writeStr.length === 1) {
+    //   symbol = writeStr;
+    // } else {
+    //   throw new TMSpecError('Write requires a string of length 1');
+    // }
   }
   return makeInstruction(symbol, move, state);
 }
